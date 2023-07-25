@@ -1,0 +1,25 @@
+#load majiq bubble
+module load conda
+conda activate majiq
+
+
+# majiq builder
+
+majiq build -o output/build -c test-5.ini gff3/gencode.v41.annotation.gff3 
+2> /dev/null
+
+
+# magiq quantifier 
+
+## FOR Delta PSI
+
+majiq deltapsi -o output/dpsi -n NI Lm -grp1 output/build/0h-14.majiq output/build/0h-16.majiq output/build/0h-17.majiq -grp2 output/build/5h-14.majiq output/build/5h-16.majiq output/build/5h-17.majiq
+
+
+# VOILA
+
+voila tsv output/build/splicegraph.sql output/dpsi/NI-Lm.deltapsi.voila --show-all -f output/voila_tsv/NI_vs_Lm.tsv
+
+voila modulize output/build/splicegraph.sql output/dpsi/NI-Lm.deltapsi.voila -d output/modulized --changing-between-group-dpsi 0.05 --decomplexify-psi-threshold 0.01 --overwrite
+
+voila view output/build/splicegraph.sql output/dpsi/NI-Lm.deltapsi.voila #NOT WORKING, VIEW USING VOILA APP
